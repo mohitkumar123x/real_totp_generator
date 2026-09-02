@@ -1,0 +1,35 @@
+---
+interface Props {
+  lang?: string;
+  t?: (key: string) => string;
+}
+const { lang = "en", t = (k: string) => k } = Astro.props;
+---
+
+<footer class="border-t border-[var(--border)] py-12" data-animate="fade-up">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+      <div class="flex items-center gap-2 text-[var(--text-muted)]">
+        <svg class="h-4 w-4" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="600" rx="135" fill="var(--text-primary)"/>
+          <g transform="translate(300,300) scale(12.5) translate(-12,-12)" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2H4"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <rect width="8" height="5" x="2" y="13" rx="1"/>
+            <path d="M8 13v-2a2 2 0 1 0-4 0v2"/>
+          </g>
+        </svg>
+        <span class="text-xs">TOTP Generator &mdash; {t("footer.privacy")}</span>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <a href={`/${lang}/about/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.about")}</a>
+        <a href={`/${lang}/privacy/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.privacy")}</a>
+        <a href={`/${lang}/terms/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.terms")}</a>
+        <a href={`/${lang}/contact/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.contact")}</a>
+        <a href="#faq" class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">FAQ</a>
+        <a href="https://datatracker.ietf.org/doc/html/rfc6238" target="_blank" rel="noopener noreferrer" class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">RFC 6238</a>
+        <span class="text-xs text-[var(--text-faint)]">&copy; {new Date().getFullYear()}</span>
+      </div>
+    </div>
+  </div>
+</footer>

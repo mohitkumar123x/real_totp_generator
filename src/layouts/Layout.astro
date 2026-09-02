@@ -1,23 +1,163 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
+import { languages, defaultLang } from '../i18n/ui';
+import type { Lang } from '../i18n/ui';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+  canonical?: string;
+}
+
+const {
+  title = 'TOTP Generator — Free Online TOTP Generator | RFC 6238 Compliant',
+  description = 'Free online TOTP generator for two-factor authentication. Generate Time-based One-Time Passwords with QR code scanning, vault storage, and auto-copy. RFC 6238 compliant. 100% client-side, your secrets never leave your browser.',
+  lang = defaultLang,
+  canonical
+} = Astro.props;
+
+const siteName = 'TOTP Generator';
+const ogImage = 'https://realtotpgenerator.com/og-image.png';
+const baseUrl = 'https://realtotpgenerator.com';
+const pageUrl = canonical || `${baseUrl}/${lang}/`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="totp generator, totp generator online, online totp generator, 2fa generator, two-factor authentication, rfc 6238, totp generator javascript, free totp generator, qr totp generator, google totp generator, totp generator npm, javascript totp generator, hmac-sha-512, online totp generator website" />
+    <meta name="author" content="TOTP Generator" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href={pageUrl} />
+
+    <!-- Hreflang for all languages -->
+    {Object.keys(languages).map((l) => (
+      <link rel="alternate" hreflang={l} href={`${baseUrl}/${l}/`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`${baseUrl}/en/`} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="TOTP Generator - Free Online Two-Factor Authentication Code Generator" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : lang.replace('-', '_')} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={pageUrl} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="TOTP Generator - Free Online Two-Factor Authentication Code Generator" />
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#171717" />
+    <meta name="application-name" content={siteName} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="RealTOTPGenerator" />
+
+    <!-- JSON-LD: WebApplication -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "TOTP Generator",
+      "url": pageUrl,
+      "description": description,
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Any (Web Browser)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "RFC 6238 compliant TOTP generation",
+        "QR code scanning from camera",
+        "QR code image upload",
+        "Secure vault with localStorage",
+        "Auto-copy to clipboard",
+        "Dark mode support",
+        "SHA-1, SHA-256, SHA-512 algorithms",
+        "6 and 8 digit codes",
+        "Clock drift detection",
+        "100% client-side processing"
+      ],
+      "browserRequirements": "Requires a modern web browser with Web Crypto API support",
+      "softwareVersion": "1.0",
+      "datePublished": "2025-01-01",
+      "dateModified": "2025-01-01",
+      "author": { "@type": "Organization", "name": "TOTP Generator", "url": pageUrl }
+    })} />
+
+    <!-- JSON-LD: FAQPage -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How can I generate a TOTP code?",
+          "acceptedAnswer": { "@type": "Answer", "text": "<p>To generate a TOTP code, enter your Base32-encoded secret key in the input field, select your preferred algorithm (SHA-1, SHA-256, or SHA-512), choose 6 or 8 digits, and click 'Generate TOTP.' The tool will instantly produce a time-based one-time password that refreshes every 30 seconds.</p>" }
+        },
+        {
+          "@type": "Question",
+          "name": "What is TOTP used for?",
+          "acceptedAnswer": { "@type": "Answer", "text": "<p>TOTP (Time-based One-Time Password) is used for two-factor authentication (2FA) to add an extra layer of security to online accounts. Services like Google, GitHub, AWS, Microsoft, and banking apps use TOTP to protect accounts from unauthorized access.</p>" }
+        },
+        {
+          "@type": "Question",
+          "name": "Is TOTP better than SMS?",
+          "acceptedAnswer": { "@type": "Answer", "text": "<p>Yes, TOTP is significantly more secure than SMS-based 2FA. SMS codes can be intercepted through SIM swapping, SS7 attacks, or social engineering. TOTP codes are generated locally on your device and are never transmitted over a network.</p>" }
+        },
+        {
+          "@type": "Question",
+          "name": "Is TOTP secure?",
+          "acceptedAnswer": { "@type": "Answer", "text": "<p>Yes, TOTP is highly secure when implemented correctly. The security relies on the secrecy of your shared key, the difficulty of guessing it (typically 160+ bits of entropy), and the short 30-second validity window.</p>" }
+        },
+        {
+          "@type": "Question",
+          "name": "How to get TOTP from QR code?",
+          "acceptedAnswer": { "@type": "Answer", "text": "<p>Click 'Scan with Camera' to use your device camera to scan an otpauth:// QR code, or click 'Upload QR Image' to upload a saved QR code image file. The tool will automatically extract the secret and configure the TOTP settings.</p>" }
+        }
+      ]
+    })} />
+
+    <!-- JSON-LD: BreadcrumbList -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": pageUrl }]
+    })} />
+
+    <script is:inline>
+      (function() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-200">
+    <slot />
+    <script is:inline src="/animations.js"></script>
+  </body>
+</html>

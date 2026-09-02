@@ -1,0 +1,85 @@
+---
+interface Props {
+  t: (key: string) => string;
+}
+const { t } = Astro.props;
+---
+
+<section class="border-t border-[var(--border)] py-16">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <div class="mx-auto max-w-[760px]">
+      <h2 class="font-heading mb-6 text-2xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_1")}
+      </h2>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        {t("seo.p1_1")}
+      </p>
+
+      <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_2")}
+      </h2>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        {t("seo.p2_1")}
+      </p>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
+        {t("seo.p2_2")}
+      </p>
+
+      <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_3")}
+      </h2>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        {t("seo.p3_1")}
+      </p>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
+        {t("seo.p3_2")}
+      </p>
+
+      <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_4")}
+      </h2>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        {t("seo.p4_1")}
+      </p>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
+        {t("seo.p4_2")}
+      </p>
+
+      <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_5")}
+      </h2>
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        <strong>{t("seo.feat1_title")}</strong> {t("seo.feat1_desc")}
+      </p>
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
+        <strong>{t("seo.feat2_title")}</strong> {t("seo.feat2_desc")}
+      </p>
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 150ms">
+        <strong>{t("seo.feat3_title")}</strong> {t("seo.feat3_desc")}
+      </p>
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 200ms">
+        <strong>{t("seo.feat4_title")}</strong> {t("seo.feat4_desc")}
+      </p>
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 250ms">
+        <strong>{t("seo.feat5_title")}</strong> {t("seo.feat5_desc")}
+      </p>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 300ms">
+        <strong>{t("seo.feat6_title")}</strong> {t("seo.feat6_desc")}
+      </p>
+
+      <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_6")}
+      </h2>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        {t("seo.p6_1")}
+      </p>
+
+      <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
+        {t("seo.h2_7")}
+      </h2>
+      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+        {t("seo.p7_1")}
+      </p>
+    </div>
+  </div>
+</section>

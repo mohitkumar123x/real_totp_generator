@@ -1,0 +1,60 @@
+---
+import { languages, defaultLang } from "../../i18n/ui";
+import type { Lang } from "../../i18n/ui";
+import { useTranslations, getAltLangs } from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+const currentLang = (lang as Lang) || defaultLang;
+const t = useTranslations(currentLang);
+---
+
+<Layout lang={currentLang} title={t("about.title")} description={t("about.p1")}>
+  <Navbar lang={currentLang} t={t} />
+
+  <section class="pt-24 pb-16">
+    <div class="mx-auto max-w-[1200px] px-6">
+      <div class="mx-auto max-w-[760px]">
+        <h1 class="font-display mb-6 text-3xl tracking-tight text-[var(--text-primary)] sm:text-4xl">
+          {t("about.h1")}
+        </h1>
+        <p class="mb-8 text-base leading-relaxed text-[var(--text-secondary)]">{t("about.p1")}</p>
+
+        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
+          {t("about.h2_1")}
+        </h2>
+        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("about.p2")}</p>
+
+        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
+          {t("about.h2_2")}
+        </h2>
+        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("about.p3")}</p>
+
+        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
+          {t("about.h2_3")}
+        </h2>
+        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("about.p4")}</p>
+
+        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
+          {t("about.h2_4")}
+        </h2>
+        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("about.p5")}</p>
+
+        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
+          {t("about.h2_5")}
+        </h2>
+        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("about.p6")}</p>
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={currentLang} t={t} />
+</Layout>

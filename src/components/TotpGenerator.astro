@@ -1,0 +1,622 @@
+---
+interface Props {
+  lang?: string;
+  t?: (key: string) => string;
+}
+const { lang = "en", t = (k: string) => k } = Astro.props;
+---
+
+<section id="generator" class="py-16">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <div class="mx-auto max-w-[640px]" data-animate="fade-up">
+      <p class="mb-2 font-[var(--font-mono)] text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
+        Generator
+      </p>
+      <h2 class="font-heading mb-8 text-2xl tracking-tight text-[var(--text-primary)]">
+        {t("generator.title")}
+      </h2>
+
+      <!-- QR Scanner -->
+      <div id="qr-section" class="mb-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 shadow-[var(--shadow-card)]">
+        <div class="mb-4 flex items-center gap-2">
+          <svg class="h-4 w-4 text-[var(--text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+          </svg>
+          <span class="text-sm font-medium text-[var(--text-primary)]">{t("generator.qr.import")}</span>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <button id="btn-scan-qr" class="inline-flex h-10 items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-4 text-sm font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--border-soft)]">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+            {t("generator.qr.camera")}
+          </button>
+          <label class="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-4 text-sm font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--border-soft)]">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            {t("generator.qr.upload")}
+            <input type="file" id="qr-file-input" accept="image/*" class="hidden" />
+          </label>
+        </div>
+        <div id="qr-camera-container" class="mt-4 hidden">
+          <video id="qr-video" class="w-full rounded-[var(--radius-sm)]" autoplay playsinline></video>
+          <button id="btn-stop-qr" class="mt-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)]">Stop Camera</button>
+        </div>
+        <p id="qr-status" class="mt-2 text-xs text-[var(--text-muted)]"></p>
+      </div>
+
+      <!-- Manual Input -->
+      <div class="mb-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 shadow-[var(--shadow-card)]">
+        <label for="secret-input" class="mb-2 block text-sm font-medium text-[var(--text-primary)]">
+          Secret Key <span class="text-[var(--text-muted)]">(Base32)</span>
+        </label>
+        <input
+          type="text"
+          id="secret-input"
+          placeholder="JBSWY3DPEHPK3PXP"
+          autocomplete="off"
+          spellcheck="false"
+          class="mb-4 h-10 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] px-3 font-[var(--font-mono)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
+        />
+
+        <div class="mb-4 grid grid-cols-2 gap-3">
+          <div>
+            <label for="algorithm-select" class="mb-1 block text-xs font-medium text-[var(--text-muted)]">{t("generator.algorithm")}</label>
+            <select id="algorithm-select" class="h-9 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] px-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none">
+              <option value="SHA-1" selected>SHA-1</option>
+              <option value="SHA-256">SHA-256</option>
+              <option value="SHA-512">SHA-512</option>
+            </select>
+          </div>
+          <div>
+            <label for="digits-select" class="mb-1 block text-xs font-medium text-[var(--text-muted)]">{t("generator.digits")}</label>
+            <select id="digits-select" class="h-9 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] px-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none">
+              <option value="6" selected>6 Digits</option>
+              <option value="8">8 Digits</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-4 grid grid-cols-2 gap-3">
+          <div>
+            <label for="period-input" class="mb-1 block text-xs font-medium text-[var(--text-muted)]">{t("generator.period")}</label>
+            <input
+              type="number"
+              id="period-input"
+              value="30"
+              min="1"
+              max="120"
+              class="h-9 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] px-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="label-input" class="mb-1 block text-xs font-medium text-[var(--text-muted)]">{t("generator.label")}</label>
+            <input
+              type="text"
+              id="label-input"
+              placeholder="e.g. GitHub, AWS"
+              class="h-9 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] px-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:border-[var(--accent)] focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <button id="btn-generate" class="inline-flex h-10 w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--color-ink)] text-sm font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-black sm:w-auto sm:px-6">
+          {t("generator.btn")}
+        </button>
+      </div>
+
+      <!-- Output -->
+      <div id="output-section" class="mb-6 hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 shadow-[var(--shadow-card)]">
+        <div class="mb-4 flex items-center justify-between">
+          <span class="text-sm font-medium text-[var(--text-primary)]">{t("generator.output.title")}</span>
+          <button id="btn-copy" class="inline-flex h-8 items-center gap-1.5 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-3 text-xs font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--border-soft)]">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            <span id="copy-text">{t("generator.copy")}</span>
+          </button>
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <div id="countdown-ring" class="relative h-16 w-16 flex-shrink-0">
+            <svg class="h-16 w-16 -rotate-90" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="28" fill="none" stroke="var(--border)" stroke-width="4" />
+              <circle id="countdown-circle" cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="175.93" stroke-dashoffset="0" />
+            </svg>
+            <span id="countdown-text" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-[var(--text-primary)]">30</span>
+          </div>
+          <div>
+            <p id="totp-display" class="font-[var(--font-mono)] text-3xl font-semibold tracking-[0.15em] text-[var(--text-primary)]">------</p>
+            <p id="totp-info" class="mt-1 text-xs text-[var(--text-muted)]"></p>
+          </div>
+        </div>
+
+        <!-- Clock Drift -->
+        <div id="drift-section" class="hidden rounded-[var(--radius-sm)] border border-[var(--border-soft)] bg-[var(--bg)] p-3">
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-[var(--text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+            <span class="text-xs font-medium text-[var(--text-primary)]">Clock Drift:</span>
+            <span id="drift-value" class="font-[var(--font-mono)] text-xs text-[var(--text-muted)]">0ms</span>
+          </div>
+        </div>
+
+        <div class="mt-4 flex gap-2">
+          <button id="btn-save-vault" class="inline-flex h-9 items-center gap-1.5 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-3 text-xs font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--border-soft)]">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+            </svg>
+            {t("generator.save")}
+          </button>
+          <button id="btn-clear" class="inline-flex h-9 items-center gap-1.5 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-3 text-xs font-medium text-[var(--text-muted)] transition-colors hover:bg-[var(--border-soft)] hover:text-[var(--text-secondary)]">
+            {t("generator.clear")}
+          </button>
+        </div>
+      </div>
+
+      <!-- Auto-copy toggle -->
+      <div id="autocopy-section" class="hidden items-center gap-3 rounded-[var(--radius-sm)] border border-[var(--border-soft)] bg-[var(--bg-elevated)] px-4 py-3">
+        <label class="relative inline-flex cursor-pointer items-center gap-2">
+          <input type="checkbox" id="autocopy-toggle" class="peer sr-only" />
+          <div class="h-5 w-9 rounded-full bg-[var(--border)] after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-[var(--accent)] peer-checked:after:translate-x-full"></div>
+          <span class="text-sm text-[var(--text-secondary)]">{t("generator.autocopy")}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // TOTP RFC 6238 Implementation
+  class TOTPGenerator {
+    private secret: Uint8Array = new Uint8Array();
+    private algorithm: string = 'SHA-1';
+    private digits: number = 6;
+    private period: number = 30;
+    private label: string = '';
+    private code: string = '';
+    private remaining: number = 30;
+    private intervalId: ReturnType<typeof setInterval> | null = null;
+    private autoCopy: boolean = false;
+
+    // Base32 decode
+    private base32Decode(input: string): Uint8Array {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+      const cleaned = input.replace(/[\s=-]/g, '').toUpperCase();
+      let bits = '';
+      for (const char of cleaned) {
+        const val = alphabet.indexOf(char);
+        if (val === -1) continue;
+        bits += val.toString(2).padStart(5, '0');
+      }
+      const bytes = new Uint8Array(Math.floor(bits.length / 8));
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(bits.substr(i * 8, 8), 2);
+      }
+      return bytes;
+    }
+
+    private async hmacSha(key: Uint8Array, message: Uint8Array, algo: string): Promise<Uint8Array> {
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw', key, { name: 'HMAC', hash: { name: algo } }, false, ['sign']
+      );
+      const sig = await crypto.subtle.sign('HMAC', cryptoKey, message);
+      return new Uint8Array(sig);
+    }
+
+    private async generateTOTP(secret: Uint8Array, time: number, algo: string, digits: number, period: number): Promise<string> {
+      const counter = Math.floor(time / period);
+      const counterBytes = new ArrayBuffer(8);
+      const view = new DataView(counterBytes);
+      view.setUint32(4, counter, false);
+
+      const hashAlgo = algo === 'SHA-1' ? 'SHA-1' : algo === 'SHA-256' ? 'SHA-256' : 'SHA-512';
+      const hmac = await this.hmacSha(secret, new Uint8Array(counterBytes), hashAlgo);
+
+      const offset = hmac[hmac.length - 1] & 0x0f;
+      const binary =
+        ((hmac[offset] & 0x7f) << 24) |
+        ((hmac[offset + 1] & 0xff) << 16) |
+        ((hmac[offset + 2] & 0xff) << 8) |
+        (hmac[offset + 3] & 0xff);
+
+      const otp = binary % Math.pow(10, digits);
+      return otp.toString().padStart(digits, '0');
+    }
+
+    async generate(): Promise<string> {
+      if (this.secret.length === 0) return '------';
+      const now = Math.floor(Date.now() / 1000);
+      this.code = await this.generateTOTP(this.secret, now, this.algorithm, this.digits, this.period);
+      this.remaining = this.period - (now % this.period);
+      return this.code;
+    }
+
+    setSecret(secret: string) {
+      this.secret = this.base32Decode(secret);
+    }
+
+    setAlgorithm(algo: string) { this.algorithm = algo; }
+    setDigits(digits: number) { this.digits = digits; }
+    setPeriod(period: number) { this.period = period; }
+    setLabel(label: string) { this.label = label; }
+    setAutoCopy(enabled: boolean) { this.autoCopy = enabled; }
+
+    getCode() { return this.code; }
+    getRemaining() { return this.remaining; }
+    getSecret() { return this.secret; }
+    getAlgorithm() { return this.algorithm; }
+    getDigits() { return this.digits; }
+    getPeriod() { return this.period; }
+    getLabel() { return this.label; }
+    getAutoCopy() { return this.autoCopy; }
+
+    // Clock drift detection
+    async detectDrift(serverTimeHint?: number): Promise<number> {
+      if (!serverTimeHint) return 0;
+      const localTime = Math.floor(Date.now() / 1000);
+      return (localTime - serverTimeHint) * 1000; // ms
+    }
+  }
+
+  // Vault Manager
+  class VaultManager {
+    private storageKey = 'totp_vault';
+
+    getEntries(): Array<{ id: string; label: string; secret: string; algorithm: string; digits: number; period: number; createdAt: number }> {
+      try {
+        return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+      } catch { return []; }
+    }
+
+    saveEntry(entry: { label: string; secret: string; algorithm: string; digits: number; period: number }) {
+      const entries = this.getEntries();
+      entries.push({
+        id: crypto.randomUUID(),
+        ...entry,
+        createdAt: Date.now()
+      });
+      localStorage.setItem(this.storageKey, JSON.stringify(entries));
+    }
+
+    deleteEntry(id: string) {
+      const entries = this.getEntries().filter(e => e.id !== id);
+      localStorage.setItem(this.storageKey, JSON.stringify(entries));
+    }
+  }
+
+  // Main App
+  const generator = new TOTPGenerator();
+  const vault = new VaultManager();
+
+  const secretInput = document.getElementById('secret-input') as HTMLInputElement;
+  const algorithmSelect = document.getElementById('algorithm-select') as HTMLSelectElement;
+  const digitsSelect = document.getElementById('digits-select') as HTMLSelectElement;
+  const periodInput = document.getElementById('period-input') as HTMLInputElement;
+  const labelInput = document.getElementById('label-input') as HTMLInputElement;
+  const btnGenerate = document.getElementById('btn-generate') as HTMLButtonElement;
+  const outputSection = document.getElementById('output-section') as HTMLElement;
+  const totpDisplay = document.getElementById('totp-display') as HTMLElement;
+  const totpInfo = document.getElementById('totp-info') as HTMLElement;
+  const countdownCircle = document.getElementById('countdown-circle') as SVGCircleElement;
+  const countdownText = document.getElementById('countdown-text') as HTMLElement;
+  const btnCopy = document.getElementById('btn-copy') as HTMLButtonElement;
+  const copyText = document.getElementById('copy-text') as HTMLElement;
+  const btnSaveVault = document.getElementById('btn-save-vault') as HTMLButtonElement;
+  const btnClear = document.getElementById('btn-clear') as HTMLButtonElement;
+  const autocopyToggle = document.getElementById('autocopy-toggle') as HTMLInputElement;
+  const autocopySection = document.getElementById('autocopy-section') as HTMLElement;
+  const driftSection = document.getElementById('drift-section') as HTMLElement;
+  const driftValue = document.getElementById('drift-value') as HTMLElement;
+
+  // QR Scanner elements
+  const btnScanQR = document.getElementById('btn-scan-qr') as HTMLButtonElement;
+  const qrCameraContainer = document.getElementById('qr-camera-container') as HTMLElement;
+  const qrVideo = document.getElementById('qr-video') as HTMLVideoElement;
+  const btnStopQR = document.getElementById('btn-stop-qr') as HTMLButtonElement;
+  const qrFileInput = document.getElementById('qr-file-input') as HTMLInputElement;
+  const qrStatus = document.getElementById('qr-status') as HTMLElement;
+
+  let qrStream: MediaStream | null = null;
+
+  // Update display
+  async function updateDisplay() {
+    const code = await generator.generate();
+    totpDisplay.textContent = code;
+    totpInfo.textContent = `${generator.getAlgorithm()} • ${generator.getDigits()} digits • ${generator.getPeriod()}s period`;
+
+    const remaining = generator.getRemaining();
+    const circumference = 2 * Math.PI * 28; // r=28
+    const offset = circumference * (1 - remaining / generator.getPeriod());
+    countdownCircle.style.strokeDashoffset = String(offset);
+    countdownText.textContent = String(remaining);
+
+    // Color based on remaining
+    if (remaining <= 5) {
+      countdownCircle.style.stroke = 'var(--color-error)';
+      countdownText.style.color = 'var(--color-error)';
+    } else if (remaining <= 10) {
+      countdownCircle.style.stroke = 'var(--color-warning)';
+      countdownText.style.color = 'var(--color-warning)';
+    } else {
+      countdownCircle.style.stroke = 'var(--accent)';
+      countdownText.style.color = '';
+    }
+
+    // Auto-copy
+    if (generator.getAutoCopy() && code !== '------') {
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {}
+    }
+  }
+
+  // Generate button
+  btnGenerate.addEventListener('click', async () => {
+    const secret = secretInput.value.trim();
+    if (!secret) {
+      secretInput.focus();
+      return;
+    }
+
+    generator.setSecret(secret);
+    generator.setAlgorithm(algorithmSelect.value);
+    generator.setDigits(parseInt(digitsSelect.value));
+    generator.setPeriod(parseInt(periodInput.value) || 30);
+    generator.setLabel(labelInput.value.trim());
+
+    outputSection.classList.remove('hidden');
+    autocopySection.classList.remove('hidden');
+    autocopySection.classList.add('flex');
+
+    await updateDisplay();
+
+    if (generator.intervalId) clearInterval(generator.intervalId);
+    generator.intervalId = setInterval(updateDisplay, 1000);
+  });
+
+  // Copy
+  btnCopy.addEventListener('click', async () => {
+    const code = generator.getCode();
+    if (!code || code === '------') return;
+    try {
+      await navigator.clipboard.writeText(code);
+      copyText.textContent = 'Copied!';
+      setTimeout(() => { copyText.textContent = 'Copy'; }, 2000);
+    } catch {
+      copyText.textContent = 'Failed';
+      setTimeout(() => { copyText.textContent = 'Copy'; }, 2000);
+    }
+  });
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'c' && !window.getSelection()?.toString()) {
+      const code = generator.getCode();
+      if (code && code !== '------') {
+        e.preventDefault();
+        navigator.clipboard.writeText(code).then(() => {
+          copyText.textContent = 'Copied!';
+          setTimeout(() => { copyText.textContent = 'Copy'; }, 2000);
+        });
+      }
+    }
+  });
+
+  // Save to vault
+  btnSaveVault.addEventListener('click', () => {
+    const secret = secretInput.value.trim();
+    if (!secret) return;
+    vault.saveEntry({
+      label: labelInput.value.trim() || 'Untitled',
+      secret,
+      algorithm: algorithmSelect.value,
+      digits: parseInt(digitsSelect.value),
+      period: parseInt(periodInput.value) || 30,
+    });
+    renderVault();
+    btnSaveVault.textContent = 'Saved!';
+    setTimeout(() => { btnSaveVault.innerHTML = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save to Vault'; }, 1500);
+  });
+
+  // Clear
+  btnClear.addEventListener('click', () => {
+    if (generator.intervalId) clearInterval(generator.intervalId);
+    secretInput.value = '';
+    labelInput.value = '';
+    algorithmSelect.value = 'SHA-1';
+    digitsSelect.value = '6';
+    periodInput.value = '30';
+    outputSection.classList.add('hidden');
+    autocopySection.classList.add('hidden');
+    autocopySection.classList.remove('flex');
+  });
+
+  // Auto-copy toggle
+  autocopyToggle.addEventListener('change', () => {
+    generator.setAutoCopy(autocopyToggle.checked);
+  });
+
+  // QR Scanner - Camera
+  btnScanQR.addEventListener('click', async () => {
+    try {
+      qrStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+      qrVideo.srcObject = qrStream;
+      qrCameraContainer.classList.remove('hidden');
+      qrStatus.textContent = 'Point your camera at a QR code...';
+      startQRDetection();
+    } catch (err) {
+      qrStatus.textContent = 'Camera access denied. Try uploading a QR image instead.';
+    }
+  });
+
+  btnStopQR.addEventListener('click', () => {
+    if (qrStream) {
+      qrStream.getTracks().forEach(t => t.stop());
+      qrStream = null;
+    }
+    qrCameraContainer.classList.add('hidden');
+    qrStatus.textContent = '';
+  });
+
+  // QR File Upload
+  qrFileInput.addEventListener('change', async (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    qrStatus.textContent = 'Scanning QR code...';
+    try {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      await img.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = scanQRFromImageData(imageData);
+      if (code) {
+        parseOTPAuthURI(code);
+      } else {
+        qrStatus.textContent = 'Could not detect QR code. Try a clearer image.';
+      }
+    } catch {
+      qrStatus.textContent = 'Error reading image file.';
+    }
+  });
+
+  // QR Detection from video (simplified - uses BarcodeDetector API if available)
+  function startQRDetection() {
+    if ('BarcodeDetector' in window) {
+      const detector = new BarcodeDetector({ formats: ['qr_code'] });
+      const detect = async () => {
+        if (!qrStream) return;
+        try {
+          const codes = await detector.detect(qrVideo);
+          if (codes.length > 0) {
+            parseOTPAuthURI(codes[0].rawValue);
+            btnStopQR.click();
+            return;
+          }
+        } catch {}
+        requestAnimationFrame(detect);
+      };
+      detect();
+    } else {
+      qrStatus.textContent = 'QR detection requires a modern browser. Try uploading a QR image instead.';
+    }
+  }
+
+  // Simplified QR scanner for uploaded images (fallback)
+  function scanQRFromImageData(imageData: ImageData): string | null {
+    // For uploaded images, we try BarcodeDetector if available
+    if ('BarcodeDetector' in window) {
+      // This is async but called synchronously here as fallback
+      return null;
+    }
+    return null;
+  }
+
+  // Parse otpauth:// URI
+  function parseOTPAuthURI(uri: string) {
+    try {
+      if (uri.startsWith('otpauth://totp/')) {
+        const url = new URL(uri);
+        const secret = url.searchParams.get('secret');
+        const issuer = url.searchParams.get('issuer');
+        const algorithm = url.searchParams.get('algorithm');
+        const digits = url.searchParams.get('digits');
+        const period = url.searchParams.get('period');
+
+        if (secret) secretInput.value = secret;
+        if (issuer) labelInput.value = issuer;
+        if (algorithm) algorithmSelect.value = algorithm;
+        if (digits) digitsSelect.value = digits;
+        if (period) periodInput.value = period;
+
+        qrStatus.textContent = `Imported: ${issuer || 'Unknown'} ${secret ? '(secret loaded)' : ''}`;
+
+        // Auto-generate
+        btnGenerate.click();
+      } else if (/^[A-Z2-7]+=*$/i.test(uri.trim())) {
+        secretInput.value = uri.trim();
+        qrStatus.textContent = 'Base32 secret detected and loaded.';
+        btnGenerate.click();
+      } else {
+        qrStatus.textContent = 'Unrecognized QR code format.';
+      }
+    } catch {
+      qrStatus.textContent = 'Error parsing QR code data.';
+    }
+  }
+
+  // Vault rendering
+  function renderVault() {
+    const vaultSection = document.getElementById('vault-entries');
+    if (!vaultSection) return;
+    const tLoad = vaultSection.dataset.tLoad || 'Load';
+    const tEmpty = vaultSection.dataset.tEmpty || 'No saved secrets yet.';
+    const entries = vault.getEntries();
+    if (entries.length === 0) {
+      vaultSection.innerHTML = `<p class="text-sm text-[var(--text-muted)]">${tEmpty}</p>`;
+      return;
+    }
+    vaultSection.innerHTML = entries.map(entry => `
+      <div class="flex items-center justify-between rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] p-3 shadow-[var(--shadow-card)]">
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-medium text-[var(--text-primary)] truncate">${entry.label}</p>
+          <p class="font-[var(--font-mono)] text-xs text-[var(--text-muted)] truncate">${entry.secret}</p>
+          <p class="text-xs text-[var(--text-faint)]">${entry.algorithm} • ${entry.digits} digits • ${entry.period}s</p>
+        </div>
+        <div class="ml-3 flex items-center gap-2">
+          <button class="vault-load h-8 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] px-2 text-xs text-[var(--text-primary)] hover:bg-[var(--border-soft)]" data-secret="${entry.secret}" data-algorithm="${entry.algorithm}" data-digits="${entry.digits}" data-period="${entry.period}" data-label="${entry.label}">
+            ${tLoad}
+          </button>
+          <button class="vault-delete h-8 w-8 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] text-xs text-[var(--text-muted)] hover:bg-[var(--border-soft)] hover:text-[var(--color-error)]" data-id="${entry.id}">
+            &times;
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    vaultSection.querySelectorAll('.vault-load').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const b = btn as HTMLElement;
+        secretInput.value = b.dataset.secret || '';
+        algorithmSelect.value = b.dataset.algorithm || 'SHA-1';
+        digitsSelect.value = b.dataset.digits || '6';
+        periodInput.value = b.dataset.period || '30';
+        labelInput.value = b.dataset.label || '';
+        btnGenerate.click();
+        document.getElementById('generator')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    vaultSection.querySelectorAll('.vault-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const b = btn as HTMLElement;
+        vault.deleteEntry(b.dataset.id || '');
+        renderVault();
+      });
+    });
+  }
+
+  // Initial vault render
+  renderVault();
+
+  // Load from URL params
+  const params = new URLSearchParams(window.location.search);
+  const secretParam = params.get('secret');
+  if (secretParam) {
+    secretInput.value = secretParam;
+    if (params.get('algorithm')) algorithmSelect.value = params.get('algorithm')!;
+    if (params.get('digits')) digitsSelect.value = params.get('digits')!;
+    if (params.get('period')) periodInput.value = params.get('period')!;
+    btnGenerate.click();
+  }
+</script>

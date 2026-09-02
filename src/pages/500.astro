@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import { useTranslations } from "../i18n/utils";
+
+const t = useTranslations("en");
+---
+
+<Layout lang="en" title={t("error.500.title")} description={t("error.500.p1")}>
+  <Navbar lang="en" t={t} />
+
+  <section class="flex min-h-[60vh] items-center justify-center pt-24 pb-16">
+    <div class="mx-auto max-w-[1200px] px-6 text-center">
+      <p class="mb-4 font-[var(--font-mono)] text-6xl font-bold text-[var(--text-muted)]">500</p>
+      <h1 class="font-display mb-4 text-2xl tracking-tight text-[var(--text-primary)]">
+        {t("error.500.h1")}
+      </h1>
+      <p class="mb-8 text-base text-[var(--text-secondary)]">
+        {t("error.500.p1")}
+      </p>
+      <a href="/en/" class="inline-flex h-11 items-center rounded-[var(--radius-pill)] bg-[var(--color-ink)] px-6 text-sm font-medium text-white no-underline transition-opacity hover:opacity-90 dark:bg-white dark:text-black">
+        {t("error.500.back")}
+      </a>
+    </div>
+  </section>
+</Layout>
