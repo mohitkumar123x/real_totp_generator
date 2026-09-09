@@ -6,29 +6,61 @@ interface Props {
 const { lang = "en", t = (k: string) => k } = Astro.props;
 ---
 
-<footer class="border-t border-[var(--border)] py-12" data-animate="fade-up">
-  <div class="mx-auto max-w-[1200px] px-6">
-    <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
-      <div class="flex items-center gap-2 text-[var(--text-muted)]">
-        <svg class="h-4 w-4" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="600" height="600" rx="135" fill="var(--text-primary)"/>
-          <g transform="translate(300,300) scale(12.5) translate(-12,-12)" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2H4"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <rect width="8" height="5" x="2" y="13" rx="1"/>
-            <path d="M8 13v-2a2 2 0 1 0-4 0v2"/>
-          </g>
-        </svg>
-        <span class="text-xs">TOTP Generator &mdash; {t("footer.privacy")}</span>
+<footer class="border-t border-[var(--border)] bg-[var(--bg)]" data-animate="fade-up">
+  <div class="mx-auto max-w-[1200px] px-6 py-12">
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="sm:col-span-2 lg:col-span-1">
+        <a href={`/${lang}/`} class="mb-4 flex items-center gap-2 text-[var(--text-primary)] no-underline">
+          <svg class="h-5 w-5" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="600" rx="135" fill="var(--text-primary)"/>
+            <g transform="translate(300,300) scale(12.5) translate(-12,-12)" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2H4"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <rect width="8" height="5" x="2" y="13" rx="1"/>
+              <path d="M8 13v-2a2 2 0 1 0-4 0v2"/>
+            </g>
+          </svg>
+          <span class="text-sm font-semibold tracking-tight">TOTP Generator</span>
+        </a>
+        <p class="mt-2 max-w-[280px] text-xs leading-relaxed text-[var(--text-muted)]">
+          {t("footer.privacy")}
+        </p>
       </div>
-      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-        <a href={`/${lang}/about/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.about")}</a>
-        <a href={`/${lang}/privacy/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.privacy")}</a>
-        <a href={`/${lang}/terms/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.terms")}</a>
-        <a href={`/${lang}/contact/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">{t("footer.contact")}</a>
-        <a href="#faq" class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">FAQ</a>
-        <a href="https://datatracker.ietf.org/doc/html/rfc6238" target="_blank" rel="noopener noreferrer" class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-secondary)]">RFC 6238</a>
-        <span class="text-xs text-[var(--text-faint)]">&copy; {new Date().getFullYear()}</span>
+
+      <div>
+        <h4 class="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Pages</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href={`/${lang}/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("nav.generator")}</a></li>
+          <li><a href={`/${lang}/blog/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("nav.blog")}</a></li>
+          <li><a href="#faq" class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("nav.faq")}</a></li>
+          <li><a href="#vault" class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("nav.vault")}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Legal</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href={`/${lang}/about/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("footer.about")}</a></li>
+          <li><a href={`/${lang}/privacy/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("footer.privacy")}</a></li>
+          <li><a href={`/${lang}/terms/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("footer.terms")}</a></li>
+          <li><a href={`/${lang}/contact/`} class="text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">{t("footer.contact")}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Resources</h4>
+        <ul class="flex flex-col gap-2">
+          <li><a href="https://datatracker.ietf.org/doc/html/rfc6238" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] no-underline transition-colors hover:text-[var(--text-primary)]">RFC 6238<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[var(--border)] pt-6 sm:flex-row">
+      <p class="text-xs text-[var(--text-faint)]">&copy; {new Date().getFullYear()} TOTP Generator. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href={`/${lang}/privacy/`} class="text-xs text-[var(--text-faint)] no-underline transition-colors hover:text-[var(--text-muted)]">Privacy</a>
+        <a href={`/${lang}/terms/`} class="text-xs text-[var(--text-faint)] no-underline transition-colors hover:text-[var(--text-muted)]">Terms</a>
+        <a href={`/${lang}/contact/`} class="text-xs text-[var(--text-faint)] no-underline transition-colors hover:text-[var(--text-muted)]">Contact</a>
       </div>
     </div>
   </div>

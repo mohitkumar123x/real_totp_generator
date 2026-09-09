@@ -20,49 +20,76 @@ const t = useTranslations(currentLang);
 <Layout lang={currentLang} title={t("terms.title")} description={t("terms.p2")}>
   <Navbar lang={currentLang} t={t} />
 
-  <section class="pt-24 pb-16">
-    <div class="mx-auto max-w-[1200px] px-6">
-      <div class="mx-auto max-w-[760px]">
-        <h1 class="font-display mb-4 text-3xl tracking-tight text-[var(--text-primary)] sm:text-4xl">
+  <section class="relative overflow-hidden border-b border-[var(--border)] pt-24 pb-16">
+    <div class="mesh-gradient mesh-animate absolute inset-0 opacity-40"></div>
+    <div class="relative mx-auto max-w-[1200px] px-6">
+      <div class="mx-auto max-w-[720px]">
+        <p class="hero-animate mb-4 font-[var(--font-mono)] text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]" style="--delay: 0ms">
+          {t("footer.terms")}
+        </p>
+        <h1 class="hero-animate font-display mb-3 text-3xl tracking-tight text-[var(--text-primary)] sm:text-4xl" style="--delay: 100ms">
           {t("terms.h1")}
         </h1>
-        <p class="mb-8 text-sm text-[var(--text-muted)]">{t("terms.p1")}</p>
-        <p class="mb-6 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p2")}</p>
+        <p class="hero-animate text-sm text-[var(--text-muted)]" style="--delay: 200ms">
+          {t("terms.p1")}
+        </p>
+      </div>
+    </div>
+  </section>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_1")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p3")}</p>
+  <section class="py-16">
+    <div class="mx-auto max-w-[1200px] px-6">
+      <div class="mx-auto max-w-[760px]">
+        <p class="mb-8 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up">{t("terms.p2")}</p>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_2")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p4")}</p>
+        <div data-animate="fade-up" style="--delay: 80ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_1")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p3")}</p>
+        </div>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_3")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p5")}</p>
+        <div data-animate="fade-up" style="--delay: 160ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_2")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p4")}</p>
+        </div>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_4")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p6")}</p>
+        <div data-animate="fade-up" style="--delay: 240ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_3")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p5")}</p>
+        </div>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_5")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p7")}</p>
+        <div data-animate="fade-up" style="--delay: 320ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_4")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p6")}</p>
+        </div>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_6")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p8")}</p>
+        <div data-animate="fade-up" style="--delay: 400ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_5")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p7")}</p>
+        </div>
 
-        <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]">
-          {t("terms.h2_7")}
-        </h2>
-        <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p9")}</p>
+        <div data-animate="fade-up" style="--delay: 480ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_6")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p8")}</p>
+        </div>
+
+        <div data-animate="fade-up" style="--delay: 560ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("terms.h2_7")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p9")}</p>
+        </div>
       </div>
     </div>
   </section>

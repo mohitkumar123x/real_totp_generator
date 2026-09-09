@@ -4,6 +4,11 @@ import { getLangFromUrl } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const currentFlag = languages[lang]?.countryCode || "un";
+
+// Preserve current subpath (e.g. /blog/, /about/) when switching languages
+const rawSubpath = Astro.url.pathname.replace(new RegExp(`^\\/${lang}(\\/|$)`), "/");
+const subpath = rawSubpath.startsWith("/") ? rawSubpath : `/${rawSubpath}`;
+const targetPath = subpath === "/" ? "/" : subpath;
 ---
 
 <div class="relative" id="lang-picker-wrapper">
@@ -32,7 +37,7 @@ const currentFlag = languages[lang]?.countryCode || "un";
   >
     {Object.entries(languages).map(([code, { name, countryCode }]) => (
       <a
-        href={`/${code}/`}
+        href={`/${code}${targetPath}`}
         class={`flex items-center gap-2.5 px-3 py-2 text-xs no-underline transition-colors hover:bg-[var(--border-soft)] ${code === lang ? 'bg-[var(--border-soft)] font-medium text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}
         lang={code}
       >

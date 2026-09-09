@@ -20,7 +20,11 @@ const {
 const siteName = 'TOTP Generator';
 const ogImage = 'https://realtotpgenerator.com/og-image.png';
 const baseUrl = 'https://realtotpgenerator.com';
-const pageUrl = canonical || `${baseUrl}/${lang}/`;
+
+const rawSubpath = Astro.url.pathname.replace(new RegExp(`^\\/${lang}(\\/|$)`), "/");
+const subpath = rawSubpath.startsWith("/") ? rawSubpath : `/${rawSubpath}`;
+const targetPath = subpath === "/" ? "/" : subpath;
+const pageUrl = canonical || `${baseUrl}/${lang}${targetPath}`;
 ---
 
 <!doctype html>
@@ -54,9 +58,9 @@ const pageUrl = canonical || `${baseUrl}/${lang}/`;
 
     <!-- Hreflang for all languages -->
     {Object.keys(languages).map((l) => (
-      <link rel="alternate" hreflang={l} href={`${baseUrl}/${l}/`} />
+      <link rel="alternate" hreflang={l} href={`${baseUrl}/${l}${targetPath}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={`${baseUrl}/en/`} />
+    <link rel="alternate" hreflang="x-default" href={`${baseUrl}/en${targetPath}`} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
