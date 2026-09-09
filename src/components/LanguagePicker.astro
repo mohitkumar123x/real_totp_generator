@@ -76,6 +76,16 @@ const targetPath = subpath === "/" ? "/" : subpath;
         chevron && chevron.classList.remove('rotate-180');
         toggle.setAttribute('aria-expanded', 'false');
       } else {
+        var mobileMenu = document.getElementById('mobile-menu');
+        var mobileToggle = document.getElementById('mobile-menu-toggle');
+        var hamburgerIcon = document.getElementById('hamburger-icon');
+        var closeIcon = document.getElementById('close-icon');
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          hamburgerIcon && hamburgerIcon.classList.remove('hidden');
+          closeIcon && closeIcon.classList.add('hidden');
+          mobileToggle && mobileToggle.setAttribute('aria-expanded', 'false');
+        }
         dropdown.classList.remove('hidden');
         chevron && chevron.classList.add('rotate-180');
         toggle.setAttribute('aria-expanded', 'true');
