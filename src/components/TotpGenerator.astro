@@ -49,9 +49,18 @@ const { lang = "en", t = (k: string) => k } = Astro.props;
 
       <!-- Manual Input -->
       <div class="mb-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 shadow-[var(--shadow-card)]">
-        <label for="secret-input" class="mb-2 block text-sm font-medium text-[var(--text-primary)]">
-          Secret Key <span class="text-[var(--text-muted)]">(Base32)</span>
-        </label>
+        <div class="mb-2 flex items-center justify-between">
+          <label for="secret-input" class="text-sm font-medium text-[var(--text-primary)]">
+            Secret Key <span class="text-[var(--text-muted)]">(Base32)</span>
+          </label>
+          <button
+            type="button"
+            id="btn-demo-secret"
+            class="text-xs font-medium text-[var(--accent)] hover:underline cursor-pointer"
+          >
+            Try Demo Key
+          </button>
+        </div>
         <input
           type="text"
           id="secret-input"
@@ -120,16 +129,20 @@ const { lang = "en", t = (k: string) => k } = Astro.props;
         </div>
 
         <div class="mb-4 flex items-center gap-4">
-          <div id="countdown-ring" class="relative h-16 w-16 flex-shrink-0">
+          <div id="countdown-ring" class="relative h-16 w-16 flex-shrink-0" title="Synchronized with standard RFC 6238 time step">
             <svg class="h-16 w-16 -rotate-90" viewBox="0 0 64 64">
               <circle cx="32" cy="32" r="28" fill="none" stroke="var(--border)" stroke-width="4" />
               <circle id="countdown-circle" cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="175.93" stroke-dashoffset="0" />
             </svg>
-            <span id="countdown-text" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-[var(--text-primary)]">30</span>
+            <span id="countdown-text" class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-[var(--text-primary)]">--</span>
           </div>
           <div>
             <p id="totp-display" class="font-[var(--font-mono)] text-3xl font-semibold tracking-[0.15em] text-[var(--text-primary)]">------</p>
             <p id="totp-info" class="mt-1 text-xs text-[var(--text-muted)]"></p>
+            <p class="mt-0.5 text-[11px] text-[var(--text-muted)] flex items-center gap-1">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Synchronized with universal 30s Unix window
+            </p>
           </div>
         </div>
 
@@ -377,6 +390,19 @@ const { lang = "en", t = (k: string) => k } = Astro.props;
     if (generator.intervalId) clearInterval(generator.intervalId);
     generator.intervalId = setInterval(updateDisplay, 1000);
   });
+
+  // Try Demo Key button
+  const btnDemoSecret = document.getElementById('btn-demo-secret');
+  if (btnDemoSecret) {
+    btnDemoSecret.addEventListener('click', () => {
+      secretInput.value = 'JBSWY3DPEHPK3PXP';
+      labelInput.value = 'Demo Account';
+      algorithmSelect.value = 'SHA-1';
+      digitsSelect.value = '6';
+      periodInput.value = '30';
+      btnGenerate.click();
+    });
+  }
 
   // Copy
   btnCopy.addEventListener('click', async () => {

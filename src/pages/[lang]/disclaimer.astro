@@ -1,0 +1,118 @@
+---
+import { languages, defaultLang } from "../../i18n/ui";
+import type { Lang } from "../../i18n/ui";
+import { useTranslations, getAltLangs } from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+const currentLang = (lang as Lang) || defaultLang;
+const t = useTranslations(currentLang);
+---
+
+<Layout
+  lang={currentLang}
+  title={t("disclaimer.title")}
+  description={t("disclaimer.p2")}
+  breadcrumbs={[
+    { name: t("blog.nav.home") || "Home", item: `https://realtotpgenerator.com/${currentLang}/` },
+    { name: t("footer.disclaimer"), item: `https://realtotpgenerator.com/${currentLang}/disclaimer/` }
+  ]}
+  isWebApplication={false}
+>
+  <Navbar lang={currentLang} t={t} />
+
+  <section class="relative overflow-hidden border-b border-[var(--border)] pt-24 pb-16">
+    <div class="mesh-gradient mesh-animate absolute inset-0 opacity-40"></div>
+    <div class="relative mx-auto max-w-[1200px] px-6">
+      <div class="mx-auto max-w-[720px]">
+        <p class="hero-animate mb-4 font-[var(--font-mono)] text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]" style="--delay: 0ms">
+          {t("footer.disclaimer")}
+        </p>
+        <h1 class="hero-animate font-display mb-3 text-3xl tracking-tight text-[var(--text-primary)] sm:text-4xl" style="--delay: 100ms">
+          {t("disclaimer.h1")}
+        </h1>
+        <p class="hero-animate text-sm text-[var(--text-muted)]" style="--delay: 200ms">
+          {t("disclaimer.p1")}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="mx-auto max-w-[1200px] px-6">
+      <div class="mx-auto max-w-[760px]">
+        <p class="mb-8 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up">{t("disclaimer.p2")}</p>
+
+        <div data-animate="fade-up" style="--delay: 80ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("disclaimer.h2_1")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("disclaimer.p3")}</p>
+        </div>
+
+        <div data-animate="fade-up" style="--delay: 160ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("disclaimer.h2_2")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("disclaimer.p4")}</p>
+        </div>
+
+        <div data-animate="fade-up" style="--delay: 240ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("disclaimer.h2_3")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("disclaimer.p5")}</p>
+        </div>
+
+        <div data-animate="fade-up" style="--delay: 320ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("disclaimer.h2_4")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("disclaimer.p6")}</p>
+        </div>
+
+        <div data-animate="fade-up" style="--delay: 400ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("disclaimer.h2_5")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("disclaimer.p7")}</p>
+        </div>
+
+        <div data-animate="fade-up" style="--delay: 480ms">
+          <h2 class="font-heading mb-4 mt-8 text-xl tracking-tight text-[var(--text-primary)]">
+            {t("disclaimer.h2_6")}
+          </h2>
+          <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("disclaimer.p8")}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contextual Internal Linking CTA -->
+  <section class="border-t border-[var(--border)] bg-[var(--bg-elevated)] py-12">
+    <div class="mx-auto max-w-[1200px] px-6 text-center" data-animate="fade-up">
+      <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-2">Generate RFC 6238 2FA Codes Online</h3>
+      <p class="text-xs text-[var(--text-secondary)] mb-5 max-w-[500px] mx-auto leading-relaxed">
+        Verify your two-factor authentication tokens in real time or explore our comprehensive security guides.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <a href={`/${currentLang}/`} class="btn-lift inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--color-ink)] px-5 py-2.5 text-xs font-medium text-white no-underline transition-opacity hover:opacity-90 dark:bg-white dark:text-black">
+          {t("hero.cta")} &rarr;
+        </a>
+        <a href={`/${currentLang}/blog/`} class="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--bg)] px-5 py-2.5 text-xs font-medium text-[var(--text-primary)] no-underline transition-colors hover:bg-[var(--border-soft)]">
+          2FA Knowledge Hub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={currentLang} t={t} />
+</Layout>

@@ -137,6 +137,25 @@ const { lang = "en", t = (k: string) => k } = Astro.props;
           </div>
         </details>
       </div>
+
+      <!-- Contextual Internal Linking to Blog & Tools -->
+      <div class="mt-10 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-6 text-center shadow-[var(--shadow-card)]" data-animate="fade-up">
+        <h3 class="text-base font-semibold text-[var(--text-primary)] mb-1">Have more questions about 2FA security or authenticator setup?</h3>
+        <p class="text-xs text-[var(--text-secondary)] mb-4 max-w-[500px] mx-auto leading-relaxed">
+          Explore our complete knowledge hub covering SMS vulnerabilities, SIM swap defense, QR code extraction, and recovery key backups.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a href={`/${lang}/blog/`} class="btn-lift inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--color-ink)] px-4 py-2 text-xs font-medium text-white no-underline transition-opacity hover:opacity-90 dark:bg-white dark:text-black">
+            Read 2FA Knowledge Hub &rarr;
+          </a>
+          <a href={`/${lang}/blog/#guide`} class="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--bg)] px-4 py-2 text-xs font-medium text-[var(--text-primary)] no-underline transition-colors hover:bg-[var(--border-soft)]">
+            Step-by-Step Setup Guide
+          </a>
+          <a href="#generator" class="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--bg)] px-4 py-2 text-xs font-medium text-[var(--text-primary)] no-underline transition-colors hover:bg-[var(--border-soft)]">
+            Generate Code Now &uarr;
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>

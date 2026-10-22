@@ -6,7 +6,7 @@ import { useTranslations } from "../i18n/utils";
 const t = useTranslations("en");
 ---
 
-<Layout lang="en" title={t("error.404.title")} description={t("error.404.p1")}>
+<Layout lang="en" title={t("error.404.title")} description={t("error.404.p1")} noindex={true} isWebApplication={false}>
   <Navbar lang="en" t={t} />
 
   <section class="flex min-h-[60vh] items-center justify-center pt-24 pb-16">

@@ -17,7 +17,16 @@ const currentLang = (lang as Lang) || defaultLang;
 const t = useTranslations(currentLang);
 ---
 
-<Layout lang={currentLang} title={t("terms.title")} description={t("terms.p2")}>
+<Layout
+  lang={currentLang}
+  title={t("terms.title")}
+  description={t("terms.p2")}
+  breadcrumbs={[
+    { name: t("blog.nav.home") || "Home", item: `https://realtotpgenerator.com/${currentLang}/` },
+    { name: t("footer.terms"), item: `https://realtotpgenerator.com/${currentLang}/terms/` }
+  ]}
+  isWebApplication={false}
+>
   <Navbar lang={currentLang} t={t} />
 
   <section class="relative overflow-hidden border-b border-[var(--border)] pt-24 pb-16">
@@ -90,6 +99,24 @@ const t = useTranslations(currentLang);
           </h2>
           <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]">{t("terms.p9")}</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contextual Internal Linking CTA -->
+  <section class="border-t border-[var(--border)] bg-[var(--bg-elevated)] py-12">
+    <div class="mx-auto max-w-[1200px] px-6 text-center" data-animate="fade-up">
+      <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-2">Free & Open-Source Security Tool</h3>
+      <p class="text-xs text-[var(--text-secondary)] mb-5 max-w-[500px] mx-auto leading-relaxed">
+        Use our RFC 6238 two-factor authentication generator freely for personal, educational, and developer testing.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <a href={`/${currentLang}/`} class="btn-lift inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--color-ink)] px-5 py-2.5 text-xs font-medium text-white no-underline transition-opacity hover:opacity-90 dark:bg-white dark:text-black">
+          {t("hero.cta")} &rarr;
+        </a>
+        <a href={`/${currentLang}/blog/`} class="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--bg)] px-5 py-2.5 text-xs font-medium text-[var(--text-primary)] no-underline transition-colors hover:bg-[var(--border-soft)]">
+          2FA Knowledge Hub
+        </a>
       </div>
     </div>
   </section>

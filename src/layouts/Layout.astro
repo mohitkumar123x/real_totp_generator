@@ -8,13 +8,21 @@ interface Props {
   description?: string;
   lang?: Lang;
   canonical?: string;
+  noindex?: boolean;
+  breadcrumbs?: Array<{ name: string; item: string }>;
+  isWebApplication?: boolean;
+  faqList?: Array<{ q: string; a: string }>;
 }
 
 const {
-  title = 'TOTP Generator — Free Online TOTP Generator | RFC 6238 Compliant',
-  description = 'Free online TOTP generator for two-factor authentication. Generate Time-based One-Time Passwords with QR code scanning, vault storage, and auto-copy. RFC 6238 compliant. 100% client-side, your secrets never leave your browser.',
+  title = 'Online TOTP Generator — Free Two-Factor Auth Codes (RFC 6238)',
+  description = 'Free online TOTP generator for two-factor authentication. Generate RFC 6238 compliant codes, scan QR codes, save secrets to your vault, and auto-copy. 100% client-side — your secrets never leave your browser.',
   lang = defaultLang,
-  canonical
+  canonical,
+  noindex = false,
+  breadcrumbs,
+  isWebApplication = true,
+  faqList,
 } = Astro.props;
 
 const siteName = 'TOTP Generator';
@@ -51,16 +59,15 @@ const pageUrl = canonical || `${baseUrl}/${lang}${targetPath}`;
     <!-- Primary SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content="totp generator, totp generator online, online totp generator, 2fa generator, two-factor authentication, rfc 6238, totp generator javascript, free totp generator, qr totp generator, google totp generator, totp generator npm, javascript totp generator, hmac-sha-512, online totp generator website" />
     <meta name="author" content="TOTP Generator" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
     <link rel="canonical" href={pageUrl} />
 
-    <!-- Hreflang for all languages -->
-    {Object.keys(languages).map((l) => (
+    <!-- Hreflang for all languages (only for indexable pages) -->
+    {!noindex && Object.keys(languages).map((l) => (
       <link rel="alternate" hreflang={l} href={`${baseUrl}/${l}${targetPath}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={`${baseUrl}/en${targetPath}`} />
+    {!noindex && <link rel="alternate" hreflang="x-default" href={`${baseUrl}/en${targetPath}`} />}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -82,7 +89,7 @@ const pageUrl = canonical || `${baseUrl}/${lang}${targetPath}`;
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content="TOTP Generator - Free Online Two-Factor Authentication Code Generator" />
 
-    <!-- Additional SEO -->
+    <!-- Additional SEO & PWA -->
     <meta name="theme-color" content="#171717" />
     <meta name="application-name" content={siteName} />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -90,73 +97,69 @@ const pageUrl = canonical || `${baseUrl}/${lang}${targetPath}`;
     <meta name="apple-mobile-web-app-title" content="RealTOTPGenerator" />
 
     <!-- JSON-LD: WebApplication -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "TOTP Generator",
-      "url": pageUrl,
-      "description": description,
-      "applicationCategory": "SecurityApplication",
-      "operatingSystem": "Any (Web Browser)",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": [
-        "RFC 6238 compliant TOTP generation",
-        "QR code scanning from camera",
-        "QR code image upload",
-        "Secure vault with localStorage",
-        "Auto-copy to clipboard",
-        "Dark mode support",
-        "SHA-1, SHA-256, SHA-512 algorithms",
-        "6 and 8 digit codes",
-        "Clock drift detection",
-        "100% client-side processing"
-      ],
-      "browserRequirements": "Requires a modern web browser with Web Crypto API support",
-      "softwareVersion": "1.0",
-      "datePublished": "2025-01-01",
-      "dateModified": "2025-01-01",
-      "author": { "@type": "Organization", "name": "TOTP Generator", "url": pageUrl }
-    })} />
+    {isWebApplication && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "TOTP Generator",
+        "url": pageUrl,
+        "description": description,
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "RFC 6238 compliant TOTP generation",
+          "QR code scanning from camera",
+          "QR code image upload",
+          "Secure vault with localStorage",
+          "Auto-copy to clipboard",
+          "Dark mode support",
+          "SHA-1, SHA-256, SHA-512 algorithms",
+          "6 and 8 digit codes",
+          "Clock drift detection",
+          "100% client-side processing"
+        ],
+        "browserRequirements": "Requires a modern web browser with Web Crypto API support",
+        "softwareVersion": "1.0",
+        "author": { "@type": "Organization", "name": "TOTP Generator", "url": baseUrl }
+      })} />
+    )}
 
-    <!-- JSON-LD: FAQPage -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
+    <!-- JSON-LD: FAQPage (Rendered only when FAQs are present on page) -->
+    {faqList && faqList.length > 0 && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqList.map((item) => ({
           "@type": "Question",
-          "name": "How can I generate a TOTP code?",
-          "acceptedAnswer": { "@type": "Answer", "text": "<p>To generate a TOTP code, enter your Base32-encoded secret key in the input field, select your preferred algorithm (SHA-1, SHA-256, or SHA-512), choose 6 or 8 digits, and click 'Generate TOTP.' The tool will instantly produce a time-based one-time password that refreshes every 30 seconds.</p>" }
-        },
-        {
-          "@type": "Question",
-          "name": "What is TOTP used for?",
-          "acceptedAnswer": { "@type": "Answer", "text": "<p>TOTP (Time-based One-Time Password) is used for two-factor authentication (2FA) to add an extra layer of security to online accounts. Services like Google, GitHub, AWS, Microsoft, and banking apps use TOTP to protect accounts from unauthorized access.</p>" }
-        },
-        {
-          "@type": "Question",
-          "name": "Is TOTP better than SMS?",
-          "acceptedAnswer": { "@type": "Answer", "text": "<p>Yes, TOTP is significantly more secure than SMS-based 2FA. SMS codes can be intercepted through SIM swapping, SS7 attacks, or social engineering. TOTP codes are generated locally on your device and are never transmitted over a network.</p>" }
-        },
-        {
-          "@type": "Question",
-          "name": "Is TOTP secure?",
-          "acceptedAnswer": { "@type": "Answer", "text": "<p>Yes, TOTP is highly secure when implemented correctly. The security relies on the secrecy of your shared key, the difficulty of guessing it (typically 160+ bits of entropy), and the short 30-second validity window.</p>" }
-        },
-        {
-          "@type": "Question",
-          "name": "How to get TOTP from QR code?",
-          "acceptedAnswer": { "@type": "Answer", "text": "<p>Click 'Scan with Camera' to use your device camera to scan an otpauth:// QR code, or click 'Upload QR Image' to upload a saved QR code image file. The tool will automatically extract the secret and configure the TOTP settings.</p>" }
-        }
-      ]
-    })} />
+          "name": item.q,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.a
+          }
+        }))
+      })} />
+    )}
 
     <!-- JSON-LD: BreadcrumbList -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": pageUrl }]
-    })} />
+    {breadcrumbs && breadcrumbs.length > 0 ? (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((b, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": b.name,
+          "item": b.item
+        }))
+      })} />
+    ) : targetPath === '/' ? (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": `${baseUrl}/${lang}/` }]
+      })} />
+    ) : null}
 
     <script is:inline>
       (function() {

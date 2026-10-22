@@ -1,13 +1,26 @@
 ---
 interface Props {
   t: (key: string) => string;
+  lang?: string;
 }
-const { t } = Astro.props;
+const { t, lang = "en" } = Astro.props;
 ---
 
 <section class="border-t border-[var(--border)] py-16">
   <div class="mx-auto max-w-[1200px] px-6">
     <div class="mx-auto max-w-[760px]">
+      <!-- Quick Section Jump & Internal Links -->
+      <nav class="mb-10 flex flex-wrap items-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-3 text-xs text-[var(--text-muted)]" aria-label="Tool sections">
+        <span class="font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Quick Jump:</span>
+        <a href="#generator" class="rounded-[var(--radius-sm)] px-2 py-1 text-[var(--text-primary)] hover:bg-[var(--border-soft)] no-underline">TOTP Generator &uarr;</a>
+        <span class="text-[var(--border)]">&bull;</span>
+        <a href="#vault" class="rounded-[var(--radius-sm)] px-2 py-1 text-[var(--text-primary)] hover:bg-[var(--border-soft)] no-underline">Encrypted Vault</a>
+        <span class="text-[var(--border)]">&bull;</span>
+        <a href={`/${lang}/blog/#featured`} class="rounded-[var(--radius-sm)] px-2 py-1 text-[var(--text-primary)] hover:bg-[var(--border-soft)] no-underline">TOTP vs SMS Guide &rarr;</a>
+        <span class="text-[var(--border)]">&bull;</span>
+        <a href="#faq" class="rounded-[var(--radius-sm)] px-2 py-1 text-[var(--text-primary)] hover:bg-[var(--border-soft)] no-underline">2FA FAQs</a>
+      </nav>
+
       <h2 class="font-heading mb-6 text-2xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
         {t("seo.h2_1")}
       </h2>
@@ -21,9 +34,18 @@ const { t } = Astro.props;
       <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
         {t("seo.p2_1")}
       </p>
-      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
         {t("seo.p2_2")}
       </p>
+
+      <!-- Contextual Internal Link: TOTP vs SMS -->
+      <div class="mb-6 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm" data-animate="fade-up">
+        <span class="font-semibold text-[var(--text-primary)]">In-Depth Comparison:</span>
+        <span class="text-[var(--text-secondary)] ml-1">Read our full security analysis on why SMS verification is vulnerable to SIM swap attacks in our guide:</span>
+        <a href={`/${lang}/blog/#featured`} class="font-medium text-[var(--accent)] hover:underline ml-1 inline-flex items-center gap-1">
+          TOTP vs SMS: Why SMS 2FA Puts Your Accounts at Risk &rarr;
+        </a>
+      </div>
 
       <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
         {t("seo.h2_3")}
@@ -38,12 +60,21 @@ const { t } = Astro.props;
       <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
         {t("seo.h2_4")}
       </h2>
-      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
         {t("seo.p4_1")}
       </p>
-      <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
+      <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
         {t("seo.p4_2")}
       </p>
+
+      <!-- Contextual Internal Link: Camera QR Scanner -->
+      <div class="mb-6 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm" data-animate="fade-up">
+        <span class="font-semibold text-[var(--text-primary)]">Instant Camera Scan:</span>
+        <span class="text-[var(--text-secondary)] ml-1">You can automatically scan any 2FA QR code with your webcam or upload a screenshot right now via the</span>
+        <a href="#generator" class="font-medium text-[var(--accent)] hover:underline ml-1 inline-flex items-center gap-1">
+          Online QR Scanner Tool &uarr;
+        </a>
+      </div>
 
       <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
         {t("seo.h2_5")}
@@ -53,9 +84,11 @@ const { t } = Astro.props;
       </p>
       <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 100ms">
         <strong>{t("seo.feat2_title")}</strong> {t("seo.feat2_desc")}
+        <a href="#generator" class="ml-1 text-xs font-medium text-[var(--accent)] hover:underline">[Scan QR Code]</a>
       </p>
       <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 150ms">
         <strong>{t("seo.feat3_title")}</strong> {t("seo.feat3_desc")}
+        <a href="#vault" class="ml-1 text-xs font-medium text-[var(--accent)] hover:underline">[Open Local Vault]</a>
       </p>
       <p class="mb-4 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 200ms">
         <strong>{t("seo.feat4_title")}</strong> {t("seo.feat4_desc")}
@@ -65,6 +98,7 @@ const { t } = Astro.props;
       </p>
       <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 300ms">
         <strong>{t("seo.feat6_title")}</strong> {t("seo.feat6_desc")}
+        <a href={`/${lang}/about/`} class="ml-1 text-xs font-medium text-[var(--accent)] hover:underline">[Learn More About Our Architecture]</a>
       </p>
 
       <h2 class="font-heading mb-4 mt-10 text-xl tracking-tight text-[var(--text-primary)]" data-animate="fade-up">
@@ -80,6 +114,56 @@ const { t } = Astro.props;
       <p class="mb-5 text-base leading-relaxed text-[var(--text-secondary)]" data-animate="fade-up" style="--delay: 50ms">
         {t("seo.p7_1")}
       </p>
+
+      <!-- Dedicated Internal Linking Hub: Essential 2FA Guides -->
+      <div class="mt-12 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-6 shadow-[var(--shadow-card)]" data-animate="fade-up">
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="font-heading text-lg tracking-tight text-[var(--text-primary)]">
+            Essential 2FA & Authenticator Guides
+          </h3>
+          <a href={`/${lang}/blog/`} class="text-xs font-medium text-[var(--accent)] hover:underline">
+            View All Guides &rarr;
+          </a>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <a href={`/${lang}/blog/#featured`} class="group block rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] p-4 no-underline transition-all hover:border-[var(--border-soft)] hover:bg-[var(--border-soft)]/20">
+            <span class="mb-1 block text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">Security Comparison</span>
+            <span class="font-medium text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+              TOTP vs SMS: Complete Security Breakdown
+            </span>
+            <p class="mt-1 text-xs text-[var(--text-secondary)]">
+              Understand SIM swapping risks, SS7 network vulnerabilities, and why offline tokens protect accounts better.
+            </p>
+          </a>
+          <a href={`/${lang}/blog/#guide`} class="group block rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] p-4 no-underline transition-all hover:border-[var(--border-soft)] hover:bg-[var(--border-soft)]/20">
+            <span class="mb-1 block text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">Tutorial</span>
+            <span class="font-medium text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+              Step-by-Step 2FA Setup Walkthrough
+            </span>
+            <p class="mt-1 text-xs text-[var(--text-secondary)]">
+              Learn how to securely extract Base32 keys, scan setup QR codes, and test one-time passwords.
+            </p>
+          </a>
+          <a href={`/${lang}/blog/#how-it-works`} class="group block rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] p-4 no-underline transition-all hover:border-[var(--border-soft)] hover:bg-[var(--border-soft)]/20">
+            <span class="mb-1 block text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">RFC 6238 Deep Dive</span>
+            <span class="font-medium text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+              How Time-Based One-Time Passwords Work
+            </span>
+            <p class="mt-1 text-xs text-[var(--text-secondary)]">
+              HMAC hashing, 30-second time steps, and clock drift tolerance explained in simple terms.
+            </p>
+          </a>
+          <a href="#vault" class="group block rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] p-4 no-underline transition-all hover:border-[var(--border-soft)] hover:bg-[var(--border-soft)]/20">
+            <span class="mb-1 block text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">Offline Tool</span>
+            <span class="font-medium text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+              Secure Encrypted Local Vault
+            </span>
+            <p class="mt-1 text-xs text-[var(--text-secondary)]">
+              Store multiple 2FA secrets directly in your browser's private localStorage with zero server transmission.
+            </p>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
